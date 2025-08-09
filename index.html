@@ -20,7 +20,7 @@
             padding-bottom: 60px;
         }
         
-        。container {
+        .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
@@ -280,19 +280,19 @@
             margin-top: 50px;
         }
         
-        。github-repo-link {
+        .github-repo-link {
             color: #4ca1af;
             text-decoration: none;
             transition: color 0.3s;
         }
         
-        。github-repo-link:hover {
+        .github-repo-link:hover {
             color: #2c3e50;
             text-decoration: underline;
         }
         
         @media (max-width: 768px) {
-            。projects-grid {
+            .projects-grid {
                 grid-template-columns: 1fr;
             }
             
@@ -300,7 +300,7 @@
                 font-size: 2.2rem;
             }
             
-            。tagline {
+            .tagline {
                 font-size: 1.1rem;
             }
         }
@@ -497,6 +497,55 @@
                     </a>
                 </div>
             </div>
+            
+            <!-- 新增 LynxEngine 项目卡片 -->
+            <div class="project-card">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-compass"></i> LynxEngine</h3>
+                    <p class="card-subtitle">极致精简的浏览器引擎</p>
+                </div>
+                <div class="card-body">
+                    <div class="card-section">
+                        <h3><i class="fas fa-info-circle"></i> 项目简介</h3>
+                        <p>基于PyQt5和QtWebEngine构建的轻量级浏览器核心，提供基本网页浏览功能，适用于嵌入式系统开发。</p>
+                    </div>
+                    
+                    <div class="card-section">
+                        <h3><i class="fas fa-star"></i> 核心特性</h3>
+                        <ul class="features-list">
+                            <li>极简架构设计（仅400行代码实现核心功能）</li>
+                            <li>完整导航功能（前进/后退/刷新/主页）</li>
+                            <li>智能URL处理（自动添加协议前缀）</li>
+                            <li>低资源占用（最小化系统消耗）</li>
+                            <li>可定制界面（模块化设计便于扩展）</li>
+                            <li>跨平台支持（Windows/Linux/macOS）</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card-section">
+                        <h3><i class="fas fa-laptop-code"></i> 示例代码</h3>
+                        <div class="code-block">
+                            <span class="code-comment"># 创建浏览器实例</span><br>
+                            <span class="code-keyword">self</span>.browser = QWebEngineView()<br>
+                            <span class="code-keyword">self</span>.browser.setUrl(QUrl(<span class="code-string">"https://www.baidu.com"</span>))<br><br>
+                            <span class="code-comment"># 导航功能实现</span><br>
+                            <span class="code-keyword">def</span> navigate_to_url(<span class="code-keyword">self</span>):<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;url = <span class="code-keyword">self</span>.url_bar.text()<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> <span class="code-keyword">not</span> url.startswith((<span class="code-string">"http://"</span>, <span class="code-string">"https://"</span>)):<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;url = <span class="code-string">"https://"</span> + url
+                        </div>
+                    </div>
+                    
+                    <div class="card-section">
+                        <h3><i class="fas fa-tags"></i> 应用场景</h3>
+                        <p>嵌入式设备、教学演示、轻量级应用集成、浏览器功能研究</p>
+                    </div>
+                    
+                    <a href="https://github.com/xin220/LynxEngine" class="github-link">
+                        <i class="fab fa-github"></i> 查看GitHub仓库
+                    </a>
+                </div>
+            </div>
         </div>
         
         <h2 class="section-title">项目技术对比</h2>
@@ -535,6 +584,12 @@
                     <td>内核API/内存保护</td>
                     <td>系统管理</td>
                 </tr>
+                <tr>
+                    <td>LynxEngine</td>
+                    <td>Python</td>
+                    <td>PyQt5/QtWebEngine</td>
+                    <td>轻量级浏览</td>
+                </tr>
             </tbody>
         </table>
         
@@ -548,7 +603,9 @@
                 <span class="code-comment"># BladeMind-AI-Desktop</span><br>
                 <span class="code-keyword">git</span> clone https://github.com/xin220/BladeMind-AI-Desktop<br><br>
                 <span class="code-comment"># CryoKernel</span><br>
-                <span class="code-keyword">git</span> clone https://github.com/xin220/CryoKernel_Process_Dominator
+                <span class="code-keyword">git</span> clone https://github.com/xin220/CryoKernel_Process_Dominator<br><br>
+                <span class="code-comment"># LynxEngine</span><br>
+                <span class="code-keyword">git</span> clone https://github.com/xin220/LynxEngine
             </div>
         </div>
     </div>
@@ -566,4 +623,3 @@
     </footer>
 </body>
 </html>
-
