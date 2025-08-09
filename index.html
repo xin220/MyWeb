@@ -1,458 +1,568 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>诡异灵火 - 幽灵烟花模拟器</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=MedievalSharp&display=swap" rel="stylesheet">
+    <title>xin220的开源项目</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, #0c0032, #190061, #240090);
-            color: #c5f9ff;
-            font-family: 'Cinzel', serif;
-            min-height: 100vh;
-            overflow: hidden;
-            position: relative;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: #333;
+            line-height: 1.6;
+            padding-bottom: 60px;
         }
         
         .container {
-            position: relative;
-            z-index: 2;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem;
-            text-align: center;
+            padding: 0 20px;
         }
         
         header {
-            padding: 2rem 0;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid rgba(197, 249, 255, 0.3);
+            background: linear-gradient(90deg, #2c3e50, #4ca1af);
+            color: white;
+            padding: 80px 0 100px;
+            text-align: center;
+            margin-bottom: 60px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(30deg);
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid rgba(255,255,255,0.3);
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            color: white;
+            margin: 0 auto 20px;
         }
         
         h1 {
-            font-size: 4rem;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            text-shadow: 0 0 15px #00e5ff, 0 0 25px #00e5ff;
-            margin-bottom: 1rem;
+            font-size: 2.8rem;
+            margin-bottom: 15px;
             font-weight: 700;
-            animation: glow 3s infinite alternate;
         }
         
-        .subtitle {
-            font-size: 1.5rem;
-            font-family: 'MedievalSharp', cursive;
-            color: #a5f1ff;
-            letter-spacing: 3px;
-            margin-bottom: 1rem;
-        }
-        
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin: 2rem 0;
-        }
-        
-        .btn {
-            background: rgba(0, 0, 0, 0.3);
-            color: #c5f9ff;
-            border: 2px solid #00e5ff;
-            padding: 0.8rem 1.5rem;
-            font-size: 1.1rem;
-            font-family: 'MedievalSharp', cursive;
-            cursor: pointer;
-            transition: all 0.3s;
-            border-radius: 5px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-        
-        .btn:hover {
-            background: rgba(0, 229, 255, 0.2);
-            box-shadow: 0 0 15px #00e5ff;
-            transform: translateY(-3px);
-        }
-        
-        .instructions {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid #00e5ff;
-            border-radius: 10px;
-            padding: 1.5rem;
+        .tagline {
+            font-size: 1.4rem;
+            font-weight: 300;
+            opacity: 0.9;
             max-width: 600px;
-            margin: 2rem auto;
-            text-align: left;
-            font-size: 1.1rem;
-            line-height: 1.6;
+            margin: 0 auto 30px;
         }
         
-        .instructions h2 {
+        .section-title {
             text-align: center;
-            margin-bottom: 1rem;
-            color: #00e5ff;
-            font-size: 1.8rem;
+            margin-bottom: 50px;
+            color: #2c3e50;
+            position: relative;
+            font-size: 2.2rem;
         }
         
-        .instructions ul {
-            padding-left: 1.5rem;
-        }
-        
-        .instructions li {
-            margin-bottom: 0.8rem;
-        }
-        
-        .ghost-fire {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-        
-        .particle {
-            position: absolute;
-            border-radius: 50%;
-            pointer-events: none;
-            opacity: 0.8;
-            mix-blend-mode: screen;
-        }
-        
-        .firefly {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #00e5ff;
-            box-shadow: 0 0 10px #00e5ff, 0 0 20px #00e5ff;
-            animation: float 5s infinite ease-in-out;
-        }
-        
-        .tombstone {
-            position: absolute;
-            bottom: 50px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 1.2rem;
-            font-family: 'MedievalSharp', cursive;
-            color: rgba(197, 249, 255, 0.7);
-            text-align: center;
-            z-index: 3;
-        }
-        
-        .tombstone:before {
-            content: "R.I.P";
+        .section-title::after {
+            content: "";
             display: block;
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #4ca1af, #2c3e50);
+            margin: 15px auto;
+            border-radius: 2px;
         }
         
-        @keyframes glow {
-            0% { text-shadow: 0 0 15px #00e5ff, 0 0 25px #00e5ff; }
-            100% { text-shadow: 0 0 20px #00e5ff, 0 0 35px #00e5ff, 0 0 45px #00e5ff; }
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
         }
         
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0); }
-            25% { transform: translate(10px, -10px); }
-            50% { transform: translate(-10px, 10px); }
-            75% { transform: translate(15px, 5px); }
+        .project-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .card-header {
+            background: linear-gradient(90deg, #4ca1af, #2c3e50);
+            color: white;
+            padding: 20px;
+        }
+        
+        .card-title {
+            display: flex;
+            align-items: center;
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+        }
+        
+        .card-title i {
+            margin-right: 12px;
+            font-size: 1.6rem;
+        }
+        
+        .card-subtitle {
+            font-size: 1rem;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+        
+        .card-body {
+            padding: 25px;
+        }
+        
+        .card-section {
+            margin-bottom: 20px;
+        }
+        
+        .card-section h3 {
+            color: #2c3e50;
+            margin-bottom: 12px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .card-section h3 i {
+            margin-right: 10px;
+            color: #4ca1af;
+        }
+        
+        .features-list {
+            list-style-type: none;
+        }
+        
+        .features-list li {
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+            border-bottom: 1px dashed #eee;
+        }
+        
+        .features-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .features-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #4ca1af;
+            font-weight: bold;
+        }
+        
+        .tech-badge {
+            display: inline-block;
+            background: #e4edf9;
+            color: #2c3e50;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin: 5px 5px 5px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #e4edf9;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        
+        .code-keyword {
+            color: #f78c6c;
+        }
+        
+        .code-comment {
+            color: #a0a0a0;
+        }
+        
+        .code-string {
+            color: #c3e88d;
+        }
+        
+        .github-link {
+            display: inline-block;
+            background: #2c3e50;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .github-link:hover {
+            background: #4ca1af;
+            transform: translateY(-2px);
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .comparison-table th {
+            background: #4ca1af;
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+        
+        .comparison-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background: #f9fbfd;
+        }
+        
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: #7f8c8d;
+            font-size: 0.95rem;
+            border-top: 1px solid #e4edf9;
+            margin-top: 50px;
+        }
+        
+        .github-repo-link {
+            color: #4ca1af;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .github-repo-link:hover {
+            color: #2c3e50;
+            text-decoration: underline;
         }
         
         @media (max-width: 768px) {
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
             h1 {
-                font-size: 2.5rem;
+                font-size: 2.2rem;
             }
             
-            .subtitle {
-                font-size: 1.2rem;
-            }
-            
-            .btn {
-                padding: 0.6rem 1rem;
-                font-size: 1rem;
+            .tagline {
+                font-size: 1.1rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="ghost-fire" id="canvas"></div>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="avatar">
+                    <i class="fas fa-user-astronaut"></i>
+                </div>
+                <h1>xin220的开源项目</h1>
+                <p class="tagline">高质量的开源工具集合 - 助力开发者和技术爱好者</p>
+            </div>
+        </div>
+    </header>
     
     <div class="container">
-        <header>
-            <h1>诡异灵火</h1>
-            <div class="subtitle">幽灵烟花模拟器</div>
-        </header>
+        <h2 class="section-title">我的项目</h2>
         
-        <div class="controls">
-            <button class="btn" id="fireworksBtn">召唤灵火</button>
-            <button class="btn" id="resetBtn">重置仪式</button>
-            <button class="btn" id="soundBtn">开启音效</button>
+        <div class="projects-grid">
+            <!-- CloakPhantom 项目卡片 -->
+            <div class="project-card">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-spider"></i> CloakPhantom</h3>
+                    <p class="card-subtitle">高级Python爬虫框架</p>
+                </div>
+                <div class="card-body">
+                    <div class="card-section">
+                        <h3><i class="fas fa-info-circle"></i> 项目简介</h3>
+                        <p>专为复杂网页抓取场景设计的高性能爬虫工具，支持分布式部署和动态渲染。</p>
+                    </div>
+                    
+                    <div class="card-section">
+                        <h3><i class="fas fa-star"></i> 核心优势</h3>
+                        <ul class="features-list">
+                            <li>智能反反爬机制（支持动态渲染和TLS指纹伪造）</li>
+                            <li>Cloudflare防护自动绕过技术</li>
+                            <li>轮换代理IP池（内置HTTP/HTTPS代理支持）</li>
+                            <li>AI增强的内容处理（智能正文提取和异常内容检测）</li>
+                            <li>企业级架构设计（Redis分布式任务队列）</li>
+                            <li>可视化监控系统（实时流量统计仪表盘）</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card-section">
+                        <h3><i class="fas fa-laptop-code"></i> 示例代码</h3>
+                        <div class="code-block">
+                            <span class="code-comment"># AI内容提取示例</span><br>
+                            <span class="code-keyword">doc</span> = Document(html_content)<br>
+                            clean_text = doc.<span class="code-keyword">summary</span>() <span class="code-comment"># 智能提取核心内容</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card-section">
+                        <h3><i class="fas fa-tags"></i> 应用场景</h3>
+                        <p>电商价格监控、舆情分析、科研数据采集、竞争情报获取</p>
+                    </div>
+                    
+                    <a href="https://github.com/xin220/CloakPhantom" class="github-link">
+                        <i class="fab fa-github"></i> 查看GitHub仓库
+                    </a>
+                </div>
+            </div>
+            
+            <!-- PhantomCalc 项目卡片 -->
+            <div class="project-card">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-calculator"></i> PhantomCalc</h3>
+                    <p class="card-subtitle">多功能计算器系统</p>
+                </div>
+                <div class="card-body">
+                    <div class="card-section">
+                        <h3><i class="fas fa-info-circle"></i> 项目简介</h3>
+                        <p>表面是普通计算器，实则是具有进程保护机制的"陷阱"工具，兼具实用性和娱乐性。</p>
+                    </div>
+                    
+                    <div class="card-section">
+                        <h3><i class="fas fa-star"></i> 创新特性</h3>
+                        <ul class="features-list">
+                            <li>隐形守护模式（双进程互相守护架构）</li>
+                            <li>Alt+Esc安全终止热键和窗口置顶功能</li>
+                            <li>强大的数学引擎（支持复数矩阵运算和微积分符号计算）</li>
+                            <li>单位换算系统（60+单位）</li>
+                            <li>历史记录云同步（AES-256加密存储）</li>
+                            <li>伪装模式（"计算错误"诱饵界面）</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card-section">
+                        <h3><i class="fas fa-laptop-code"></i> 示例代码</h3>
+                        <div class="code-block">
+                            <span class="code-comment"># 进程保护机制</span><br>
+                            protection_thread = threading.Thread(target=protect_process)<br>
+                            protection_thread.<span class="code-keyword">start</span>() <span class="code-comment"># 后台守护进程</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card-section">
+                        <h3><i class="fas fa-tags"></i> 应用场景</h3>
+                        <p>数学教学工具、隐私保护、系统安全演示</p>
+                    </div>
+                    
+                    <a href="https://github.com/xin220/PhantomCalc" class="github-link">
+                        <i class="fab fa-github"></i> 查看GitHub仓库
+                    </a>
+                </div>
+            </div>
+            
+            <!-- BladeMind-AI-Desktop 项目卡片 -->
+            <div class="project-card">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-robot"></i> BladeMind-AI-Desktop</h3>
+                    <p class="card-subtitle">智能对话系统</p>
+                </div>
+                <div class="card-body">
+                    <div class="card-section">
+                        <h3><i class="fas fa-info-circle"></i> 项目简介</h3>
+                        <p>本地化AI助手框架，支持固定式回答和扩展接口，具有企业级GUI界面。</p>
+                    </div>
+                    
+                    <div class="card-section">
+                        <h3><i class="fas fa-star"></i> 技术亮点</h3>
+                        <ul class="features-list">
+                            <li>多模态交互系统（上下文感知对话引擎）</li>
+                            <li>支持文件解析（PDF/Word/Excel）</li>
+                            <li>语音输入/输出接口</li>
+                            <li>专业级GUI框架（圆角气泡聊天UI）</li>
+                            <li>扩展功能模块（深度思考、联网搜索、代码解释）</li>
+                            <li>安全审计特性（对话日志加密、敏感词过滤）</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card-section">
+                        <h3><i class="fas fa-laptop-code"></i> 示例代码</h3>
+                        <div class="code-block">
+                            <span class="code-comment"># 对话处理流程</span><br>
+                            <span class="code-keyword">if</span> message <span class="code-keyword">in</span> fixed_responses:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> fixed_responses[message] <span class="code-comment"># 智能匹配预置回答</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card-section">
+                        <h3><i class="fas fa-tags"></i> 应用场景</h3>
+                        <p>客户服务自动化、教育辅助工具、个人知识管理</p>
+                    </div>
+                    
+                    <a href="https://github.com/xin220/BladeMind-AI-Desktop" class="github-link">
+                        <i class="fab fa-github"></i> 查看GitHub仓库
+                    </a>
+                </div>
+            </div>
+            
+            <!-- CryoKernel_Process_Dominator 项目卡片 -->
+            <div class="project-card">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-microchip"></i> CryoKernel Process Dominator</h3>
+                    <p class="card-subtitle">进程管理终端</p>
+                </div>
+                <div class="card-body">
+                    <div class="card-section">
+                        <h3><i class="fas fa-info-circle"></i> 项目简介</h3>
+                        <p>Windows系统级进程监控工具，提供进程冻结、内存保护等高级功能。</p>
+                    </div>
+                    
+                    <div class="card-section">
+                        <h3><i class="fas fa-star"></i> 核心技术</h3>
+                        <ul class="features-list">
+                            <li>内核级操作（直接调用Windows API）</li>
+                            <li>SE_DEBUG权限获取和线程级控制粒度</li>
+                            <li>智能资源管理（高精度CPU和内存监控）</li>
+                            <li>内存保护系统（只读内存锁定和异常访问拦截）</li>
+                            <li>企业级监控面板（进程关系树形图）</li>
+                            <li>自动异常检测机制</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card-section">
+                        <h3><i class="fas fa-laptop-code"></i> 示例代码</h3>
+                        <div class="code-block">
+                            <span class="code-comment">// 进程挂起</span><br>
+                            NTSTATUS status = NtSuspendProcess(hProcess);
+                        </div>
+                    </div>
+                    
+                    <div class="card-section">
+                        <h3><i class="fas fa-tags"></i> 应用场景</h3>
+                        <p>软件调试、系统优化、安全研究、恶意软件分析</p>
+                    </div>
+                    
+                    <a href="https://github.com/xin220/CryoKernel_Process_Dominator" class="github-link">
+                        <i class="fab fa-github"></i> 查看GitHub仓库
+                    </a>
+                </div>
+            </div>
         </div>
         
-        <div class="instructions">
-            <h2>神秘仪式指南</h2>
-            <ul>
-                <li>点击"召唤灵火"按钮唤醒幽灵烟花</li>
-                <li>在画面上点击任意位置引爆灵火烟花</li>
-                <li>移动鼠标引导幽灵火焰的流动方向</li>
-                <li>不同区域的点击会产生不同颜色的灵火</li>
-                <li>使用"重置仪式"清除所有灵火痕迹</li>
-                <li>开启音效获得完整的幽灵仪式体验</li>
-            </ul>
+        <h2 class="section-title">项目技术对比</h2>
+        
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>项目</th>
+                    <th>核心语言</th>
+                    <th>关键技术</th>
+                    <th>适用场景</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>CloakPhantom</td>
+                    <td>Python</td>
+                    <td>Redis分布式/Cloudflare破解</td>
+                    <td>大数据采集</td>
+                </tr>
+                <tr>
+                    <td>PhantomCalc</td>
+                    <td>Python</td>
+                    <td>进程守护/加密存储</td>
+                    <td>教育/安全</td>
+                </tr>
+                <tr>
+                    <td>BladeMind</td>
+                    <td>Python</td>
+                    <td>NLP/GUI框架</td>
+                    <td>智能对话</td>
+                </tr>
+                <tr>
+                    <td>CryoKernel</td>
+                    <td>Python/C++</td>
+                    <td>内核API/内存保护</td>
+                    <td>系统管理</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div style="text-align: center; margin: 40px 0;">
+            <h3 style="margin-bottom: 20px;">获取最新代码</h3>
+            <div class="code-block" style="display: inline-block; text-align: left;">
+                <span class="code-comment"># CloakPhantom</span><br>
+                <span class="code-keyword">git</span> clone https://github.com/xin220/CloakPhantom<br><br>
+                <span class="code-comment"># PhantomCalc</span><br>
+                <span class="code-keyword">git</span> clone https://github.com/xin220/PhantomCalc<br><br>
+                <span class="code-comment"># BladeMind-AI-Desktop</span><br>
+                <span class="code-keyword">git</span> clone https://github.com/xin220/BladeMind-AI-Desktop<br><br>
+                <span class="code-comment"># CryoKernel</span><br>
+                <span class="code-keyword">git</span> clone https://github.com/xin220/CryoKernel_Process_Dominator
+            </div>
         </div>
     </div>
     
-    <div class="tombstone">
-        谨以此仪式纪念逝去的灵魂<br>
-        1900-2023
-    </div>
-    
-    <audio id="backgroundSound" loop>
-        <source src="https://assets.mixkit.co/sfx/preview/mixkit-ghostly-whispers-492.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="fireworkSound">
-        <source src="https://assets.mixkit.co/sfx/preview/mixkit-mystery-whoosh-1124.mp3" type="audio/mpeg">
-    </audio>
-    
-    <script>
-        // 初始化Canvas
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        
-        // 音频元素
-        const backgroundSound = document.getElementById('backgroundSound');
-        const fireworkSound = document.getElementById('fireworkSound');
-        const soundBtn = document.getElementById('soundBtn');
-        
-        // 粒子数组
-        let particles = [];
-        let fireworks = [];
-        let mouse = { x: null, y: null, radius: 100 };
-        
-        // 幽灵火焰颜色
-        const colors = [
-            '#00e5ff', '#00ff9d', '#9d00ff', '#ff00c8', '#ff4d00'
-        ];
-        
-        // 调整Canvas大小
-        window.addEventListener('resize', function() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-        
-        // 鼠标位置跟踪
-        canvas.addEventListener('mousemove', function(event) {
-            mouse.x = event.x;
-            mouse.y = event.y;
-        });
-        
-        // 点击产生烟花
-        canvas.addEventListener('click', function(event) {
-            createFirework(event.x, event.y);
-            playFireworkSound();
-        });
-        
-        // 按钮事件
-        document.getElementById('fireworksBtn').addEventListener('click', function() {
-            createInitialFireworks();
-        });
-        
-        document.getElementById('resetBtn').addEventListener('click', function() {
-            particles = [];
-            fireworks = [];
-        });
-        
-        soundBtn.addEventListener('click', function() {
-            if (backgroundSound.paused) {
-                backgroundSound.play();
-                soundBtn.textContent = '关闭音效';
-            } else {
-                backgroundSound.pause();
-                soundBtn.textContent = '开启音效';
-            }
-        });
-        
-        // 创建初始烟花
-        function createInitialFireworks() {
-            for (let i = 0; i < 5; i++) {
-                setTimeout(() => {
-                    const x = Math.random() * canvas.width;
-                    const y = Math.random() * canvas.height;
-                    createFirework(x, y);
-                    playFireworkSound();
-                }, i * 300);
-            }
-        }
-        
-        // 播放烟花音效
-        function playFireworkSound() {
-            fireworkSound.currentTime = 0;
-            fireworkSound.play();
-        }
-        
-        // 创建烟花爆炸
-        function createFirework(x, y) {
-            const firework = {
-                x: x,
-                y: y,
-                particles: [],
-                color: colors[Math.floor(Math.random() * colors.length)]
-            };
-            
-            // 创建爆炸粒子
-            const particleCount = 100 + Math.floor(Math.random() * 100);
-            for (let i = 0; i < particleCount; i++) {
-                const angle = Math.random() * Math.PI * 2;
-                const speed = 2 + Math.random() * 4;
-                const size = 2 + Math.random() * 4;
-                const vx = Math.cos(angle) * speed;
-                const vy = Math.sin(angle) * speed;
-                
-                firework.particles.push({
-                    x: firework.x,
-                    y: firework.y,
-                    vx: vx,
-                    vy: vy,
-                    size: size,
-                    color: firework.color,
-                    alpha: 1,
-                    life: 100 + Math.random() * 50
-                });
-            }
-            
-            fireworks.push(firework);
-        }
-        
-        // 创建随机萤火虫
-        function createFireflies() {
-            for (let i = 0; i < 20; i++) {
-                const firefly = document.createElement('div');
-                firefly.className = 'firefly';
-                firefly.style.left = `${Math.random() * 100}%`;
-                firefly.style.top = `${Math.random() * 100}%`;
-                firefly.style.animationDuration = `${3 + Math.random() * 7}s`;
-                firefly.style.animationDelay = `${Math.random() * 5}s`;
-                document.body.appendChild(firefly);
-            }
-        }
-        
-        // 粒子类
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = canvas.height;
-                this.size = 1 + Math.random() * 3;
-                this.speedX = -1 + Math.random() * 2;
-                this.speedY = -2 - Math.random() * 3;
-                this.color = colors[Math.floor(Math.random() * colors.length)];
-                this.alpha = 0.1 + Math.random() * 0.5;
-            }
-            
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                
-                // 鼠标互动
-                const dx = mouse.x - this.x;
-                const dy = mouse.y - this.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                
-                if (distance < mouse.radius) {
-                    const force = (mouse.radius - distance) / mouse.radius;
-                    const angle = Math.atan2(dy, dx);
-                    this.x -= Math.cos(angle) * force * 5;
-                    this.y -= Math.sin(angle) * force * 5;
-                }
-                
-                // 粒子生命周期
-                if (this.y < 0 || this.x < 0 || this.x > canvas.width) {
-                    this.x = Math.random() * canvas.width;
-                    this.y = canvas.height;
-                    this.speedY = -2 - Math.random() * 3;
-                }
-            }
-            
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = this.color;
-                ctx.globalAlpha = this.alpha;
-                ctx.fill();
-            }
-        }
-        
-        // 创建背景粒子
-        function createParticles() {
-            for (let i = 0; i < 100; i++) {
-                particles.push(new Particle());
-            }
-        }
-        
-        // 动画循环
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // 绘制幽灵背景
-            ctx.fillStyle = 'rgba(12, 0, 50, 0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // 更新并绘制背景粒子
-            particles.forEach(particle => {
-                particle.update();
-                particle.draw();
-            });
-            
-            // 更新并绘制烟花
-            for (let i = fireworks.length - 1; i >= 0; i--) {
-                const firework = fireworks[i];
-                let allDead = true;
-                
-                for (let j = firework.particles.length - 1; j >= 0; j--) {
-                    const p = firework.particles[j];
-                    
-                    p.x += p.vx;
-                    p.y += p.vy;
-                    p.vy += 0.05; // 重力
-                    p.alpha -= 0.005;
-                    p.life--;
-                    
-                    if (p.life <= 0 || p.alpha <= 0) {
-                        firework.particles.splice(j, 1);
-                    } else {
-                        allDead = false;
-                        
-                        // 绘制粒子
-                        ctx.beginPath();
-                        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                        ctx.fillStyle = p.color;
-                        ctx.globalAlpha = p.alpha;
-                        ctx.fill();
-                    }
-                }
-                
-                if (allDead) {
-                    fireworks.splice(i, 1);
-                }
-            }
-            
-            requestAnimationFrame(animate);
-        }
-        
-        // 初始化
-        createParticles();
-        createFireflies();
-        animate();
-    </script>
+    <footer>
+        <div class="container">
+            <p>所有项目均采用MIT许可证，欢迎贡献代码和提出改进建议</p>
+            <p style="margin-top: 15px;">
+                GitHub仓库: 
+                <a href="https://github.com/xin220" class="github-repo-link">
+                    github.com/xin220
+                </a>
+            </p>
+        </div>
+    </footer>
 </body>
 </html>
