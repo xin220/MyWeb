@@ -5,47 +5,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>星语心愿的开源项目</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Noto Sans SC', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
-            color: #333;
+            background: linear-gradient(135deg, #0c0f1d 0%, #1a1e38 100%);
+            color: #e6e9ff;
             line-height: 1.6;
             padding-bottom: 60px;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
         
-        。container {
+        .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
         }
         
         header {
-            background: linear-gradient(90deg, #2c3e50, #4ca1af);
+            background: radial-gradient(circle at center, #0c0f1d 0%, #1a1e38 100%);
             color: white;
-            padding: 80px 0 100px;
+            padding: 40px 0 60px;
             text-align: center;
-            margin-bottom: 60px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             position: relative;
             overflow: hidden;
         }
         
-        header::before {
-            content: "";
+        .particles-container {
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
-            transform: rotate(30deg);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%; /* 修复了高度设置 */
+            z-index: 1;
+        }
+        
+        .grid-line {
+            position: absolute;
+            background: rgba(0, 204, 255, 0.2); /* 增强可见性 */
+            z-index: 0;
+        }
+        
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.7;
+            z-index: 1;
+            background: radial-gradient(circle, rgba(0, 204, 255, 0.8), transparent 70%);
+            box-shadow: 0 0 15px rgba(0, 204, 255, 0.5);
         }
         
         .header-content {
@@ -53,118 +70,154 @@
             z-index: 2;
             max-width: 800px;
             margin: 0 auto;
+            padding: 0 15px;
         }
         
         .avatar {
-            width: 120px;
-            height: 120px;
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
-            border: 4px solid rgba(255,255,255,0.3);
-            margin-bottom: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            margin-bottom: 15px;
             background: linear-gradient(45deg, #6a11cb, #2575fc);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 50px;
+            font-size: 40px;
             color: white;
-            margin: 0 auto 20px;
+            margin: 0 auto 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            transition: transform 0.5s ease;
+        }
+        
+        .avatar:hover {
+            transform: rotate(360deg) scale(1.05);
         }
         
         h1 {
-            font-size: 2.8rem;
-            margin-bottom: 15px;
+            font-size: 2rem;
+            margin-bottom: 10px;
             font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
         
         .tagline {
-            font-size: 1.4rem;
+            font-size: 1.1rem;
             font-weight: 300;
             opacity: 0.9;
             max-width: 600px;
-            margin: 0 auto 30px;
+            margin: 0 auto 25px;
+            padding: 0 10px;
         }
         
         .section-title {
             text-align: center;
-            margin-bottom: 50px;
-            color: #2c3e50;
+            margin-bottom: 40px;
+            color: #fff;
             position: relative;
-            font-size: 2.2rem;
+            font-size: 1.8rem;
+            padding-bottom: 15px;
         }
         
         .section-title::after {
             content: "";
             display: block;
-            width: 80px;
+            width: 70px;
             height: 4px;
             background: linear-gradient(90deg, #4ca1af, #2c3e50);
-            margin: 15px auto;
+            margin: 15px auto 0;
             border-radius: 2px;
         }
         
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
-            margin-bottom: 60px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
         }
         
         .project-card {
-            background: white;
+            background: linear-gradient(145deg, #1f2a4e, #192238);
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            border: 1px solid rgba(76, 161, 175, 0.2);
+            z-index: 2;
+        }
+        
+        .project-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(76, 161, 175, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
         
         .project-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(76, 161, 175, 0.4);
+        }
+        
+        .project-card:hover::before {
+            opacity: 1;
         }
         
         .card-header {
             background: linear-gradient(90deg, #4ca1af, #2c3e50);
             color: white;
-            padding: 20px;
+            padding: 15px;
+            position: relative;
         }
         
         .card-title {
             display: flex;
             align-items: center;
-            font-size: 1.4rem;
-            margin-bottom: 8px;
+            font-size: 1.3rem;
+            margin-bottom: 5px;
         }
         
         .card-title i {
-            margin-right: 12px;
-            font-size: 1.6rem;
+            margin-right: 10px;
+            font-size: 1.4rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .card-title:hover i {
+            transform: rotate(15deg);
         }
         
         .card-subtitle {
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 300;
             opacity: 0.9;
         }
         
         .card-body {
-            padding: 25px;
+            padding: 20px;
         }
         
         .card-section {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
         
         .card-section h3 {
-            color: #2c3e50;
-            margin-bottom: 12px;
-            font-size: 1.2rem;
+            color: #4ca1af;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
             display: flex;
             align-items: center;
         }
         
         .card-section h3 i {
-            margin-right: 10px;
+            margin-right: 8px;
             color: #4ca1af;
+            font-size: 1rem;
         }
         
         .features-list {
@@ -172,10 +225,16 @@
         }
         
         .features-list li {
-            padding: 8px 0;
-            padding-left: 30px;
+            padding: 7px 0;
+            padding-left: 25px;
             position: relative;
-            border-bottom: 1px dashed #eee;
+            border-bottom: 1px dashed rgba(230, 233, 255, 0.1);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        
+        .features-list li:hover {
+            transform: translateX(5px);
         }
         
         .features-list li:last-child {
@@ -192,131 +251,354 @@
         
         .tech-badge {
             display: inline-block;
-            background: #e4edf9;
-            color: #2c3e50;
-            padding: 5px 12px;
+            background: rgba(76, 161, 175, 0.2);
+            color: #e6e9ff;
+            padding: 4px 10px;
             border-radius: 20px;
-            font-size: 0.85rem;
-            margin: 5px 5px 5px 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            font-size: 0.8rem;
+            margin: 4px 4px 4px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border: 1px solid rgba(76, 161, 175, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .tech-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(76, 161, 175, 0.3);
         }
         
         .code-block {
-            background: #2c3e50;
-            color: #e4edf9;
-            padding: 15px;
+            background: #1a1f3b;
+            color: #e6e9ff;
+            padding: 12px;
             border-radius: 8px;
             font-family: 'Courier New', Courier, monospace;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             overflow-x: auto;
-            margin: 15px 0;
+            margin: 12px 0;
+            border: 1px solid rgba(76, 161, 175, 0.3);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .code-block:hover {
+            box-shadow: inset 0 0 15px rgba(76, 161, 175, 0.5);
         }
         
         .code-keyword {
-            color: #f78c6c;
+            color: #ff7b72;
         }
         
         .code-comment {
-            color: #a0a0a0;
+            color: #8b949e;
         }
         
         .code-string {
-            color: #c3e88d;
+            color: #a5d6ff;
         }
         
         .github-link {
-            display: inline-block;
-            background: #2c3e50;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(90deg, #2c3e50, #极简架构设计（仅400行代码实现核心功能）4ca1af);
             color: white;
             padding: 8px 20px;
             border-radius: 30px;
             text-decoration: none;
             font-size: 0.9rem;
             transition: all 0.3s ease;
-            margin-top: 10px;
+            margin-top: 8px;
+            border: none;
+            font-weight: 500;
+            box-shadow: 0 4px 10px rgba(44, 62, 80, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .github-link::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
         }
         
         .github-link:hover {
-            background: #4ca1af;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(44, 62, 80, 0.4);
+        }
+        
+        .github-link:hover::before {
+            left: 100%;
+        }
+        
+        .github-link i {
+            margin-right: 8px;
+            font-size: 1rem;
+        }
+        
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            margin: 30px 0;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
         
         .comparison-table {
             width: 100%;
             border-collapse: collapse;
-            margin: 30px 0;
-            background: white;
+            background: rgba(31, 42, 78, 0.7);
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid rgba(76, 161, 175, 0.3);
+            min-width: 600px;
         }
         
         .comparison-table th {
-            background: #4ca1af;
+            background: linear-gradient(90deg, #2c3e50, #4ca1af);
             color: white;
-            padding: 15px;
+            padding: 12px 15px;
             text-align: left;
+            font-weight: 600;
+            font-size: 0.95rem;
+            position: sticky;
+            left: 0;
         }
         
         .comparison-table td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #eee;
+            padding: 10px 12px;
+            border-bottom: 1px solid rgba(230, 233, 255, 0.1);
+            font-size: 0.9rem;
         }
         
         .comparison-table tr:nth-child(even) {
-            background: #f9fbfd;
+            background: rgba(31, 42, 78, 0.4);
         }
         
         .comparison-table tr:last-child td {
             border-bottom: none;
         }
         
-        footer {
-            text-align: center;
-            padding: 40px 0;
-            color: #7f8c8d;
-            font-size: 0.95rem;
-            border-top: 1px solid #e4edf9;
-            margin-top: 50px;
+        .comparison-table tr:hover {
+            background: rgba(76, 161, 175, 0.1);
         }
         
-        。github-repo-link {
+        .code-container {
+            overflow-x: auto;
+            margin: 30px 0;
+            -webkit-overflow-scrolling: touch;
+            padding: 10px 0;
+            border-radius: 10px;
+            background: rgba(31, 42, 78, 0.7);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .code-wrapper {
+            display: inline-block;
+            min-width: 300px;
+            padding: 0 15px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: #a0a8d0;
+            font-size: 0.9rem;
+            margin-top: 40px;
+            position: relative;
+        }
+        
+        footer::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(76, 161, 175, 0.5), transparent);
+        }
+        
+        .github-repo-link {
             color: #4ca1af;
             text-decoration: none;
             transition: color 0.3s;
+            font-weight: 600;
+            position: relative;
+            font-size: 0.9rem;
         }
         
-        。github-repo-link:hover {
-            color: #2c3e50;
-            text-decoration: underline;
+        .github-repo-link::after {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #4ca1af;
+            transition: width 0.3s ease;
+        }
+        
+        .github-repo-link:hover {
+            color: #fff;
+        }
+        
+        .github-repo-link:hover::after {
+            width: 100%;
         }
         
         @media (max-width: 768px) {
-            。projects-grid {
+            .projects-grid {
                 grid-template-columns: 1fr;
+                gap: 20px;
             }
             
             h1 {
-                font-size: 2.2rem;
+                font-size: 1.7rem;
             }
             
-            。tagline {
-                font-size: 1.1rem;
+            .tagline {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+                margin-bottom: 30px;
+            }
+            
+            .header-content {
+                padding: 0 10px;
+            }
+            
+            .avatar {
+                width: 80px;
+                height: 80px;
+                font-size: 35px;
+            }
+            
+            .card-body {
+                padding: 15px;
+            }
+            
+            .card-section h3 {
+                font-size: 1rem;
+            }
+            
+            .features-list li {
+                font-size: 0.9rem;
+                padding-left: 22px;
+            }
+            
+            .code-block {
+                padding: 10px;
+                font-size: 0.8rem;
+            }
+            
+            .github-link {
+                font-size: 0.85rem;
+                padding: 7px 16px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            header {
+                padding: 30px 0 50px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .tagline {
+                font-size: 0.95rem;
+            }
+            
+            .section-title {
+                font-size: 1.3rem;
+                margin-bottom: 25px;
+            }
+            
+            .card-title {
+                font-size: 1.15rem;
+            }
+            
+            .card-subtitle {
+                font-size: 0.85rem;
+            }
+            
+            .code-container {
+                margin: 20px 0;
+            }
+        }
+        
+        /* 水波动画 */
+        .water-wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path fill="rgba(31,42,78,0.7)" d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25"></path><path fill="rgba(31,42,78,0.7)" d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5"></path><path fill="rgba(31,42,78,0.7)" d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z"></path></svg>');
+            background-size: cover;
+            background-repeat: no-repeat;
+            animation: wave 12s linear infinite;
+            z-index: -1;
+        }
+        
+        @keyframes wave {
+            0% { background-position-x: 0; }
+            100% { background-position-x: 1200px; }
+        }
+        
+        /* 粒子动画 */
+        @keyframes floatParticle {
+            0% { 
+                transform: translate(0, 0);
+                opacity: 0.7;
+                box-shadow: 0 0 10px rgba(0, 204, 255, 0.5);
+            }
+            25% { 
+                transform: translate(10px, -5px);
+                opacity: 1;
+                box-shadow: 0 0 15px rgba(0, 204, 255, 0.8);
+            }
+            50% { 
+                transform: translate(-8px, 8px);
+                opacity: 0.4;
+                box-shadow: 0 0 5px rgba(0, 204, 255, 0.3);
+            }
+            75% { 
+                transform: translate(5px, -3px);
+                opacity: 0.8;
+                box-shadow: 0 0 12px rgba(0, 204, 255, 0.6);
+            }
+            100% { 
+                transform: translate(0, 0);
+                opacity: 0.7;
+                box-shadow: 0 0 10px rgba(0, 204, 255, 0.5);
             }
         }
     </style>
 </head>
 <body>
     <header>
+        <div class="particles-container" id="particlesContainer"></div>
         <div class="container">
             <div class="header-content">
                 <div class="avatar">
                     <i class="fas fa-user-astronaut"></i>
                 </div>
                 <h1>星语心愿的开源项目</h1>
-                <p class="tagline">低质量的开源工具集合 - 寻找高中技术爱好者</p>
+                <p class="tagline">高质量的开源工具集合 - 寻找高中技术爱好者</p>
             </div>
         </div>
+        <div class="water-wave"></div>
     </header>
     
     <div class="container">
@@ -335,13 +617,13 @@
                         <p>专为复杂网页抓取场景设计的高性能爬虫工具，支持分布式部署和动态渲染。</p>
                     </div>
                     
-                    <div class="card-section">
+                    <极简架构设计（仅400行代码实现核心功能）div class="card-section">
                         <h3><i class="fas fa-star"></i> 核心优势</h3>
                         <ul class="features-list">
                             <li>智能反反爬机制（支持动态渲染和TLS指纹伪造）</li>
                             <li>Cloudflare防护自动绕过技术</li>
                             <li>轮换代理IP池（内置HTTP/HTTPS代理支持）</li>
-                            <li>AI增强的内容处理（智能正文提取和异常内容检测）</li>
+                            <li>AI增强的内容处理（智能正文提取和异常内容检测）</li> <!-- 修复了标签闭合 -->
                             <li>企业级架构设计（Redis分布式任务队列）</li>
                             <li>可视化监控系统（实时流量统计仪表盘）</li>
                         </ul>
@@ -498,7 +780,7 @@
                 </div>
             </div>
             
-            <!-- 新增 LynxEngine 项目卡片 -->
+            <!-- LynxEngine 项目卡片 -->
             <div class="project-card">
                 <div class="card-header">
                     <h3 class="card-title"><i class="fas fa-compass"></i> LynxEngine</h3>
@@ -550,62 +832,67 @@
         
         <h2 class="section-title">项目技术对比</h2>
         
-        <table class="comparison-table">
-            <thead>
-                <tr>
-                    <th>项目</th>
-                    <th>核心语言</th>
-                    <th>关键技术</th>
-                    <th>适用场景</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>CloakPhantom</td>
-                    <td>Python</td>
-                    <td>Redis分布式/Cloudflare破解</td>
-                    <td>大数据采集</td>
-                </tr>
-                <tr>
-                    <td>PhantomCalc</td>
-                    <td>Python</td>
-                    <td>进程守护/加密存储</td>
-                    <td>教育/安全</td>
-                </tr>
-                <tr>
-                    <td>BladeMind</td>
-                    <td>Python</td>
-                    <td>NLP/GUI框架</td>
-                    <td>智能对话</td>
-                </tr>
-                <tr>
-                    <td>CryoKernel</td>
-                    <td>Python/C++</td>
-                    <td>内核API/内存保护</td>
-                    <td>系统管理</td>
-                </tr>
-                <tr>
-                    <td>LynxEngine</td>
-                    <td>Python</td>
-                    <td>PyQt5/QtWebEngine</td>
-                    <td>轻量级浏览</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-container">
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>项目</th>
+                        <th>核心语言</th>
+                        <th>关键技术</th>
+                        <th>适用场景</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>CloakPhantom</td>
+                        <td>Python</td>
+                        <td>Redis分布式/Cloudflare破解</td>
+                        <td>大数据采集</td>
+                    </tr>
+                    <tr>
+                        <td>PhantomCalc</td>
+                        <td>Python</td>
+                        <td>进程守护/加密存储</td>
+                        <td>教育/安全</td>
+                    </tr>
+                    <tr>
+                        <td>BladeMind</td>
+                        <td>Python</td>
+                        <td>NLP/GUI框架</td>
+                        <td>智能对话</td>
+                    </tr>
+                    <tr>
+                        <td>CryoKernel</td>
+                        <td>Python/C++</td>
+                        <td>内核API/内存保护</td>
+                        <td>系统管理</td>
+                    </tr>
+                    <tr>
+                        <td>LynxEngine</td>
+                        <td>Python</td>
+                        <td>PyQt5/QtWebEngine</td>
+                        <td>轻量级浏览</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         
-        <div style="text-align: center; margin: 40px 0;">
-            <h3 style="margin-bottom: 20px;">获取最新代码</h3>
-            <div class="code-block" style="display: inline-block; text-align: left;">
-                <span class="code-comment"># CloakPhantom</span><br>
-                <span class="code-keyword">git</span> clone https://github.com/xin220/CloakPhantom<br><br>
-                <span class="code-comment"># PhantomCalc</span><br>
-                <span class="code-keyword">git</span> clone https://github.com/xin220/PhantomCalc<br><br>
-                <span class="code-comment"># BladeMind-AI-Desktop</span><br>
-                <span class="code-keyword">git</span> clone https://github.com/xin220/BladeMind-AI-Desktop<br><br>
-                <span class="code-comment"># CryoKernel</span><br>
-                <span class="code-keyword">git</span> clone https://github.com/xin220/CryoKernel_Process_Dominator<br><br>
-                <span class="code-comment"># LynxEngine</span><br>
-                <span class="code-keyword">git</span> clone https://github.com/xin220/LynxEngine
+        <h2 class="section-title">获取最新代码</h2>
+        
+        <div class="code-container">
+            <div class="code-wrapper">
+                <div class="code-block">
+                    <span class="code-comment"># CloakPhantom</span><br>
+                    <span class="code-keyword">git</span> clone https://github.com/xin220/CloakPhantom<br><br>
+                    <span class="code-comment"># PhantomCalc</span><br>
+                    <span class="code-keyword">git</span> clone https://github.com/xin220/PhantomCalc<br><br>
+                    <span class="code-comment"># BladeMind-AI-Desktop</span><br>
+                    <span class="code-keyword">git</span> clone https://github.com/xin220/BladeMind-AI-Desktop<br><br>
+                    <span class="code-comment"># CryoKernel</span><br>
+                    <span class="code-keyword">git</span> clone https://github.com/xin220/CryoKernel_Process_Dominator<br><br>
+                    <span class="code-comment"># LynxEngine</span><br>
+                    <span class="code-keyword">git</span> clone https://github.com/xin220/LynxEngine
+                </div>
             </div>
         </div>
     </div>
@@ -621,6 +908,77 @@
             </p>
         </div>
     </footer>
+
+    <script>
+        // 创建科幻粒子背景
+        function createSciFiParticles() {
+            const container = document.getElementById('particlesContainer');
+            const particleCount = 30;
+            
+            // 创建网格线条
+            for (let i = 0; i < 10; i++) {
+                const line = document.createElement('div');
+                line.classList.add('grid-line');
+                
+                if (Math.random() > 0.5) {
+                    // 水平线
+                    line.style.width = '100%';
+                    line.style.height = '1px';
+                    line.style.top = `${Math.random() * 100}%`;
+                } else {
+                    // 垂直线
+                    line.style.width = '1px';
+                    line.style.height = '100%';
+                    line.style.left = `${Math.random() * 100}%`;
+                }
+                
+                container.appendChild(line);
+            }
+            
+            // 创建粒子
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // 大小和位置
+                const size = Math.random() * 4 + 1;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}%`;
+                particle.style.top = `${posY}%`;
+                
+                // 随机动画参数
+                const duration = Math.random() * 25 + 10;
+                const delay = Math.random() * 8;
+                particle.style.animation = `floatParticle ${duration}s ease-in-out ${delay}s infinite`;
+                
+                container.appendChild(particle);
+            }
+        }
+        
+        // 添加项目卡片悬停效果
+        function enhanceCards() {
+            const cards = document.querySelectorAll('.project-card');
+            
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-10px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        }
+        
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', () => {
+            createSciFiParticles();
+            enhanceCards();
+        });
+    </script>
 </body>
 </html>
-
